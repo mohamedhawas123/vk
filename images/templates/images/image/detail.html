@@ -14,7 +14,7 @@
         <span class="total">{{ image.users_like.count }}</span>
         like{{ image.users_like.count|pluralize }}
       </span>
-      <a href="#" data-id="{{ image.id }}" data-action="{% if request.user in image.users_like.all %}
+      <a href="#"  data-id="{{ image.id }}" data-action="{% if request.user in image.users_like.all %}
       un
       {% endif %}
       like"
@@ -40,4 +40,6 @@
         Nobody likes this image yet.
       {% endfor %}
     </div>
+
 {% endblock %}
+
