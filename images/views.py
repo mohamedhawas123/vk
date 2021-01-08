@@ -37,7 +37,6 @@ def image_detail(request, id, slug):
 @login_required
 @require_POST
 def image_like(request):
-    print(request.POST.get("me"))
     image_id = request.POST.get("id")
     action = request.POST.get("action")
     if image_id and action:
