@@ -1,3 +1,3 @@
 from django.shortcuts import render
 
-# Create your views here.
+actions = actions.select_related('user', 'user__profile').prefetch_related('target')[:10]
