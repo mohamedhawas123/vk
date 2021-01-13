@@ -2,6 +2,10 @@ from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
 from django.urls import reverse
+from django.db.models.signals import m2m_changed
+from django.dispatch import receiver
+
+
 
 class Image(models.Model):
     user =  models.ForeignKey(settings.AUTH_USER_MODEL, related_name='images_created' ,on_delete=models.CASCADE)
@@ -12,7 +16,8 @@ class Image(models.Model):
     description = models.TextField(blank=True)
     created = models.DateField(auto_now_add=True, db_index=True)
     users_like = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='images_liked', blank=True)
-    
+    total_likes = models.PositiveIntegerField(db_index=True, default=0)
+
 
 
     def __str__(self):
@@ -25,5 +30,13 @@ class Image(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+
+
+@receiver(m2m_changed, sender=Image.users_like.through)
+def user_like_changed(sender, instance, **kwargs):
+
+    instance.total_likes = instance.users_like.count()
+    instance.save()
     
     
