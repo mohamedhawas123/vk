@@ -28,12 +28,7 @@
         <li {% if section == "dashboard" %}class="selected"{% endif %}>
           <a href="{% url "dashboard" %}">My dashboard</a>
         </li>
-        <li {% if section == "images" %}class="selected"{% endif %}>
-          <a href="#">Images</a>
-        </li>
-        <li {% if section == "people" %}class="selected"{% endif %}>
-          <a href="#">People</a>
-        </li>
+       
         <li {% if section == "images" %}class="selected"{% endif %}>
           <a href="{% url "images:list" %}">Images</a>
         </li>
@@ -129,3 +124,5 @@
 
 </body>
 </html>
+
+

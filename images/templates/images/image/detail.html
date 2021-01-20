@@ -1,48 +1,42 @@
 {% extends "base.html" %}
-{% load thumbnail %}
-{% block title %}{{ image.title }}{% endblock %}
-{% block content %}
-  <h1>{{ image.title }}</h1>
-  <a href="{{ image.image.url }}">
-    <img src="{% thumbnail image.image 300x0  quality=100 %}" class="image-detail" />
-  </a>
-  
-  
-  <div class="image-info">
-    <div>
-      <span class="count">
-        <span class="total">{{ image.users_like.count }}</span>
-        like{{ image.users_like.count|pluralize }}
-      </span>
-      <span class="count">
-        {{ total_views }} view{{ total_views|pluralize }}
-      </span>
-      <a href="#"  data-id="{{ image.id }}" data-action="{% if request.user in image.users_like.all %}
-      un
-      {% endif %}
-      like"
-      class="like button">
-        {% if request.user not in image.users_like.all %}
-          Like
-        {% else %}
-          Unlike
-        {% endif %}
-      </a>
-    </div>
-    {{ image.description|linebreaks }}
-   
-  </div>
 
+{% block title %}{{ image.title }}{% endblock %}
+
+{% block content %} 
+  <h1>{{ image.title }}</h1>
+  {% load thumbnail %}
+  <a href="{{ image.image.url }}">
+    <img src="{% thumbnail image.image 300x0 %}" class="image-detail">
+  </a>
+  {% with total_likes=image.users_like.count users_like=image.users_like.all %}
+    <div class="image-info">
+      <div>
+        <span class="count">
+          <span class="total">{{ total_likes }}</span>
+          like{{ total_likes|pluralize }}
+        </span>
+        <span class="count">
+          {{ total_views }} view{{ total_views|pluralize }}
+        </span>
+        <a href="#" data-id="{{ image.id }}" data-action="{% if request.user in users_like %}un{% endif %}like" class="like button">
+          {% if request.user not in users_like %}
+            Like
+          {% else %}
+            Unlike
+          {% endif %}
+        </a>
+      </div>
+      {{ image.description|linebreaks }}
+    </div>
+      
     <div class="image-likes">
-      {% for user in image.users_like.all %}
-        <div>
-          <img src="{{ user.profile.photo.url }}">
-          <p>{{ user.first_name }}</p>
-        </div>
+      {% for user in users_like %}
+        
       {% empty %}
         Nobody likes this image yet.
       {% endfor %}
+      {% endwith %}
     </div>
-
-{% endblock %}
+    {% endblock %}
+{% endblock %
 
